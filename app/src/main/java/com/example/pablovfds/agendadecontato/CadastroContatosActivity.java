@@ -11,13 +11,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.pablovfds.agendadecontato.database.DataBase;
 import com.example.pablovfds.agendadecontato.dominio.RepositorioContato;
 import com.example.pablovfds.agendadecontato.dominio.entidades.Contato;
+import com.example.pablovfds.agendadecontato.util.DateUtils;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class CadastroContatosActivity extends AppCompatActivity {
@@ -95,6 +98,8 @@ public class CadastroContatosActivity extends AppCompatActivity {
         editTextDatasEspecias.setOnClickListener(exibeDataListener);
         editTextDatasEspecias.setOnFocusChangeListener(exibeDataListener);
 
+        contato = new Contato();
+
         try {
             dataBase = new DataBase(this);
             sqLiteDatabase = dataBase.getWritableDatabase();
@@ -138,17 +143,12 @@ public class CadastroContatosActivity extends AppCompatActivity {
 
     private void inserirContato(){
         try {
-            contato = new Contato();
 
             contato.setNome(editTextNome.getText().toString());
             contato.setTelefone(editTextTelefone.getText().toString());
             contato.setEndereco(editTextEndereco.getText().toString());
             contato.setGrupos(editTextGrupos.getText().toString());
             contato.setEmail(editTextEmail.getText().toString());
-
-            Date date = new Date();
-
-            contato.setDatasEspeciais(date);
 
             contato.setTipoDatasEspecias(String.valueOf(spinnerDatasEspecias.getSelectedItemPosition()));
             contato.setTipoEmail(String.valueOf(spinnerEmail.getSelectedItemPosition()));
@@ -166,8 +166,15 @@ public class CadastroContatosActivity extends AppCompatActivity {
     }
 
     private void exibeData(){
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, null, 2015, 10,1);
-        datePickerDialog.show();
+
+        Calendar calendar = Calendar.getInstance();
+
+        int ano =  calendar.get(Calendar.YEAR);
+        int mes =  calendar.get(Calendar.MONTH);
+        int dia =  calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog dlg = new DatePickerDialog(this, new SelecionaDataListener(), ano, mes, dia);
+        dlg.show();
     }
 
     private class ExibeDataListener implements View.OnClickListener, View.OnFocusChangeListener{
@@ -182,6 +189,19 @@ public class CadastroContatosActivity extends AppCompatActivity {
             if (hasFocus){
                 exibeData();
             }
+        }
+    }
+
+    private class SelecionaDataListener implements DatePickerDialog.OnDateSetListener{
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            String dt = DateUtils.dateToString(year, monthOfYear, dayOfMonth);
+            Date data = DateUtils.getDate(year, monthOfYear, dayOfMonth);
+
+            editTextDatasEspecias.setText(dt);
+
+            contato.setDatasEspeciais(data);
         }
     }
 }
