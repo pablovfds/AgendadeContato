@@ -49,7 +49,6 @@ public class ContatoActivity extends Activity implements View.OnClickListener {
             dlg.setNeutralButton("Ok", null);
             dlg.show();
         }
-
     }
 
     @Override

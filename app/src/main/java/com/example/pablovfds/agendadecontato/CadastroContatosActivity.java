@@ -1,6 +1,7 @@
 package com.example.pablovfds.agendadecontato;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -88,6 +90,11 @@ public class CadastroContatosActivity extends AppCompatActivity {
         adapterTipoDatasEspeciais.add("Data comemorativa");
         adapterTipoDatasEspeciais.add("Outros");
 
+        ExibeDataListener exibeDataListener = new ExibeDataListener();
+
+        editTextDatasEspecias.setOnClickListener(exibeDataListener);
+        editTextDatasEspecias.setOnFocusChangeListener(exibeDataListener);
+
         try {
             dataBase = new DataBase(this);
             sqLiteDatabase = dataBase.getWritableDatabase();
@@ -143,10 +150,10 @@ public class CadastroContatosActivity extends AppCompatActivity {
 
             contato.setDatasEspeciais(date);
 
-            contato.setTipoDatasEspecias("");
-            contato.setTipoEmail("");
-            contato.setTipoEndereco("");
-            contato.setTipoTelefone("");
+            contato.setTipoDatasEspecias(String.valueOf(spinnerDatasEspecias.getSelectedItemPosition()));
+            contato.setTipoEmail(String.valueOf(spinnerEmail.getSelectedItemPosition()));
+            contato.setTipoEndereco(String.valueOf(spinnerEndereco.getSelectedItemPosition()));
+            contato.setTipoTelefone(String.valueOf(spinnerTelefone.getSelectedItemPosition()));
 
             repositorioContato.inserirContato(contato);
 
@@ -157,4 +164,26 @@ public class CadastroContatosActivity extends AppCompatActivity {
             dlg.show();
         }
     }
+
+    private void exibeData(){
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, null, 2015, 10,1);
+        datePickerDialog.show();
+    }
+
+    private class ExibeDataListener implements View.OnClickListener, View.OnFocusChangeListener{
+
+        @Override
+        public void onClick(View v) {
+            exibeData();
+        }
+
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (hasFocus){
+                exibeData();
+            }
+        }
+    }
 }
+
+
