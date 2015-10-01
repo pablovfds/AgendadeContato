@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">AgendaContatos</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_cadastro_contatos">Contatos</string>
+    <string name="labelNome">Nome</string>
+    <string name="labelTelefone">Telefone</string>
+    <string name="labelEmail">Email</string>
+    <string name="labelEndereco">Endereço</string>
+    <string name="labelDatasEspecias">Datas Especiais</string>
+    <string name="labelGrupos">Grupos</string>
+    <string name="labelSalvar">Salvar</string>
+    <string name="labelAlterar">Alterar</string>
+    <string name="labelExcluir">Excluir</string>
+
+</resources>
